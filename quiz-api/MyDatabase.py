@@ -34,3 +34,19 @@ class MyDatabase():
             res.append(ParticipationResult(
                 playerName=r[0], score=r[1], date=r[2]))
         return res
+    
+    def getQuestionByID(self, questionID):
+        cur = self.connection.cursor()
+        cur.execute(
+            "Select id, title, image, position, text from questions Where id = {questionID}")
+        result = cur.fetchall
+        q = Question(id = result[0], title= result[1],image=result[2],position=result[3],text=result[4])
+
+        cur.execute(
+            "Select id, text, isCorrect, nbSips from scores Answers Where questionID = {questionID}")
+        rows = cur.fetchall()
+        res = []
+        for r in rows:
+            q.possibleAnswers.append(Answer(id = result[0], text= result[1],isCorrect=result[2],nbSips=result[3]))
+
+        return q

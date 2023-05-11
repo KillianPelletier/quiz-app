@@ -33,6 +33,11 @@ def getQuizInfo():
     participationResults = db.getParticipationResults()
     return {"size": len(participationResults), "scores": [p.toJSON() for p in participationResults]}, 200
 
+@app.route('/questions/{questionId}', methods=['GET'])
+def getQuestionByID(questionID):
+    question = db.getQuestionByID(questionID)
+    return {"question": question.toJSON()}, 200
+
 
 @app.route('/login', methods=['POST'])
 def login():
