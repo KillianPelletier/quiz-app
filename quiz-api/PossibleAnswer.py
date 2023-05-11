@@ -1,5 +1,5 @@
 
-class Answer():
+class PossibleAnswer():
     def __init__(self,id:int, text: str, isCorrect: bool, nbSips: int):
         self.id = id
         self.text = text

@@ -4,7 +4,7 @@ from flask_cors import CORS
 import hashlib
 from ParticipationResult import *
 from Question import *
-from Answer import *
+from PossibleAnswer import *
 from MyDatabase import *
 import os
 
@@ -33,9 +33,9 @@ def getQuizInfo():
     participationResults = db.getParticipationResults()
     return {"size": len(participationResults), "scores": [p.toJSON() for p in participationResults]}, 200
 
-@app.route('/questions/{questionId}', methods=['GET'])
-def getQuestionByID(questionID):
-    question = db.getQuestionByID(questionID)
+@app.route('/questions/<questionId>', methods=['GET'])
+def getQuestionByID(questionId):
+    question = db.getQuestionByID(int(questionId))
     return {"question": question.toJSON()}, 200
 
 
