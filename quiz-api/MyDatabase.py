@@ -27,7 +27,7 @@ class MyDatabase():
     def getParticipationResults(self):
         cur = self.connection.cursor()
         cur.execute(
-            "Select playerName, score, date from scores Order By score Desc")
+            "Select playerName, score, date from participation_results Order By score Desc")
         rows = cur.fetchall()
         res = []
         for r in rows:
