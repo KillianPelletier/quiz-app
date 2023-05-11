@@ -2,13 +2,16 @@ from flask import Flask, request
 from Utils.jwt_utils import *
 from flask_cors import CORS
 import hashlib
-from Models import Question, Answer, Score
-from Database.MyDatabase import *
+from ParticipationResult import *
+from Question import *
+from Answer import *
+from MyDatabase import *
+import os
 
 # region Variable
 # "flask2023"
 PWD_MD5 = b'\xd8\x17\x06PG\x92\x93\xc1.\x02\x01\xe5\xfd\xf4_@'
-DB_PATH = "quiz.db"
+DB_PATH = os. getcwd() + "\\Database\\quiz.db"
 # endregion
 
 app = Flask(__name__)
@@ -27,8 +30,8 @@ def index():
 
 @app.route('/quiz-info', methods=['GET'])
 def getQuizInfo():
-    db.getScores(10)
-    return {"size": 10, "scores": [{'playerName': 'JeanJean', 'score': 10, 'date': '09/05/2023 18:30:00'}, {'playerName': 'Marc', 'score': 5, 'date': '08/05/2023  20:35:00'}]}, 200
+    participationResults = db.getParticipationResults()
+    return {"size": len(participationResults), "scores": [p.toJSON() for p in participationResults]}, 200
 
 
 @app.route('/login', methods=['POST'])

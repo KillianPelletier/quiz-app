@@ -1,5 +1,7 @@
 import sqlite3
-from Models import *
+from ParticipationResult import *
+from Question import *
+from Answer import *
 
 
 class MyDatabase():
@@ -22,13 +24,13 @@ class MyDatabase():
 
         # IF ERROR THEN cur.execute('rollback')
 
-    def addScore(self, username: str, value: float):
-        exec(
-            f"Insert into scores (username, value) values ( {username}, {value})"
-        )
-
-    def getScores(self, count: int):
+    def getParticipationResults(self):
         cur = self.connection.cursor()
-        cur.execute("Select * from scores Order By value Desc")
+        cur.execute(
+            "Select playerName, score, date from scores Order By score Desc")
         rows = cur.fetchall()
-        return rows
+        res = []
+        for r in rows:
+            res.append(ParticipationResult(
+                playerName=r[0], score=r[1], date=r[2]))
+        return res
