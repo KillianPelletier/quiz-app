@@ -12,6 +12,7 @@ import os
 # "flask2023"
 PWD_MD5 = b'\xd8\x17\x06PG\x92\x93\xc1.\x02\x01\xe5\xfd\xf4_@'
 DB_PATH = os. getcwd() + "\\Database\\quiz.db"
+DEFAULT_NB_SIPS = 1  # Default value when nbSips not defined
 # endregion
 
 app = Flask(__name__)
@@ -30,8 +31,9 @@ def index():
 
 @app.route('/quiz-info', methods=['GET'])
 def getQuizInfo():
+    nbQuestions = db.getNbQuestions()
     participationResults = db.getParticipationResults()
-    return {"size": len(participationResults), "scores": [p.toJSON() for p in participationResults]}, 200
+    return {"size": nbQuestions, "scores": [p.toJSON() for p in participationResults]}, 200
 
 
 @app.route('/questions', methods=['GET'])
@@ -81,9 +83,30 @@ def addQuestion():
                         position=payload['position'], text=payload['text'])
     for pa in payload['possibleAnswers']:
         question.possibleAnswers.append(PossibleAnswer(
-            id=None, text=pa['text'], isCorrect=pa['isCorrect'], nbSips=pa.get('nbSips', 1)))
+            id=None, text=pa['text'], isCorrect=pa['isCorrect'], nbSips=pa.get('nbSips', DEFAULT_NB_SIPS)))
     db.addQuestion(question)
     return {"id": question.id}, 200
+
+
+@app.route('/questions/<questionId>', methods=['PUT'])
+def updateQuestion(questionId):
+    questionId = int(questionId)
+    message, code = check_user_auth(request.authorization)
+    if code != 200:
+        return message, code
+
+    payload = request.get_json()
+    question = Question(id=questionId, title=payload['title'], image=payload['image'],
+                        position=payload['position'], text=payload['text'])
+    for pa in payload['possibleAnswers']:
+        question.possibleAnswers.append(PossibleAnswer(
+            id=None, text=pa['text'], isCorrect=pa['isCorrect'], nbSips=pa.get('nbSips', DEFAULT_NB_SIPS)))
+
+    success = db.updateQuestion(question)
+    if success:
+        return {}, 204
+    else:
+        return {"error": f"Question with id = {questionId} not found"}, 404
 
 
 @app.route('/questions/<questionId>', methods=['DELETE'])
