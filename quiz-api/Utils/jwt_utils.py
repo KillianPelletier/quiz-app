@@ -56,7 +56,9 @@ def check_user_auth(authorization):
     if authorization is None:
         return 'Unauthorized', 401
     try:
-        decode_token(authorization.token)
+        sub = decode_token(authorization.token)
+        if sub != "quiz-app-admin":
+            return "No Permission", 401
     except JwtError as e:
         return e.message, 401
     return None, 200

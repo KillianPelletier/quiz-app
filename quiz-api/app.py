@@ -41,7 +41,7 @@ def getQuestionByID(questionId):
     if question is None:
         return {"error": f"Question with id = {questionId} not found"}, 404
     else:
-        return {"question": question.toJSON()}, 200
+        return question.toJSON(), 200
 
 
 @app.route('/login', methods=['POST'])
@@ -74,6 +74,40 @@ def addQuestion():
             id=None, text=pa['text'], isCorrect=pa['isCorrect'], nbSips=pa.get('nbSips', 1)))
     db.addQuestion(question)
     return {"id": question.id}, 200
+
+
+@app.route('/questions/<questionId>', methods=['DELETE'])
+def deleteQuestion(questionId):
+    questionId = int(questionId)
+    message, code = check_user_auth(request.authorization)
+    if code != 200:
+        return message, code
+
+    success = db.deleteQuestion(questionId)
+    if success:
+        return {}, 204
+    else:
+        return {"error": f"Question with id = {questionId} not found"}, 404
+
+
+@app.route('/questions/all', methods=['DELETE'])
+def deleteAllQuestions():
+    message, code = check_user_auth(request.authorization)
+    if code != 200:
+        return message, code
+
+    db.deleteAllQuestions()
+    return {}, 204
+
+@app.route('/participations/all', methods=['DELETE'])
+def deleteAllParticipations():
+    message, code = check_user_auth(request.authorization)
+    if code != 200:
+        return message, code
+
+    db.deleteAllParticipations()
+    return {}, 204
+
 
 # endregion
 
