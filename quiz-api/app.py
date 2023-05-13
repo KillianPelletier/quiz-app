@@ -20,7 +20,7 @@ CORS(app)
 db = MyDatabase(DB_PATH)
 
 
-# region Routes
+# region Public routes
 
 
 @app.route('/')
@@ -32,6 +32,7 @@ def index():
 def getQuizInfo():
     participationResults = db.getParticipationResults()
     return {"size": len(participationResults), "scores": [p.toJSON() for p in participationResults]}, 200
+
 
 @app.route('/questions/<questionId>', methods=['GET'])
 def getQuestionByID(questionId):
@@ -49,6 +50,26 @@ def login():
         return {"token": token}, 200
     else:
         return 'Unauthorized', 401
+
+# endregion
+
+# region Private routes
+
+
+@app.route('/questions', methods=['POST'])
+def addQuestion():
+    message, code = check_user_auth(request.authorization)
+    if code != 200:
+        return message, code
+
+    payload = request.get_json()
+    question = Question(id=None, title=payload['title'], image=payload['image'],
+                        position=payload['position'], text=payload['text'])
+    for pa in payload['possibleAnswers']:
+        question.possibleAnswers.append(PossibleAnswer(
+            id=None, text=pa['text'], isCorrect=pa['isCorrect'], nbSips=pa.get('nbSips', 1)))
+    db.addQuestion(question)
+    return {"id": question.id}, 200
 
 # endregion
 

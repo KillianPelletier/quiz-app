@@ -12,7 +12,6 @@ class MyDatabase():
         # set the sqlite connection in "manual transaction mode"
         # (by default, all execute calls are performed in their own transactions, not what we want)
         self.connection.isolation_level = None
-        self.cur = self.connection.cursor()
 
     def close(self):
         self.connection.close()
@@ -34,19 +33,31 @@ class MyDatabase():
             res.append(ParticipationResult(
                 playerName=r[0], score=r[1], date=r[2]))
         return res
-    
+
     def getQuestionByID(self, questionID):
         cur = self.connection.cursor()
         cur.execute(
             f"Select id, title, image, position, text from questions Where id = {questionID}")
         result = cur.fetchall()[0]
-        q = Question(id = result[0], title= result[1],image=result[2],position=result[3],text=result[4])
+        q = Question(id=result[0], title=result[1],
+                     image=result[2], position=result[3], text=result[4])
 
         cur.execute(
             f"Select id, text, isCorrect, nbSips from possible_answers Answers Where questionID = {questionID}")
         rows = cur.fetchall()
         res = []
         for r in rows:
-            q.possibleAnswers.append(PossibleAnswer(id = result[0], text= result[1],isCorrect=result[2],nbSips=result[3]))
+            q.possibleAnswers.append(PossibleAnswer(
+                id=result[0], text=result[1], isCorrect=result[2], nbSips=result[3]))
 
         return q
+
+    def addQuestion(self, q: Question):
+        cur = self.connection.cursor()
+        cur.execute("begin")
+        cur.execute(
+            "Insert into questions (title, image, position, text) values (?, ?, ?, ?)",
+            (q.title, q.image, q.position, q.text))
+        q.id = cur.lastrowid
+        cur.execute('commit')
+        return cur.lastrowid

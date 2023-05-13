@@ -50,3 +50,13 @@ def decode_token(auth_token):
         raise JwtError('Signature expired. Please log in again.')
     except jwt.InvalidTokenError as e:
         raise JwtError('Invalid token. Please log in again.')
+
+
+def check_user_auth(authorization):
+    if authorization is None:
+        return 'Unauthorized', 401
+    try:
+        decode_token(authorization.token)
+    except JwtError as e:
+        return e.message, 401
+    return None, 200
