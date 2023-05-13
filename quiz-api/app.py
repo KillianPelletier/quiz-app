@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 from Utils.jwt_utils import *
 from flask_cors import CORS
 import hashlib
@@ -11,7 +11,7 @@ import os
 # region Variable
 # "flask2023"
 PWD_MD5 = b'\xd8\x17\x06PG\x92\x93\xc1.\x02\x01\xe5\xfd\xf4_@'
-DB_PATH = os. getcwd() + "\\Database\\quiz.db"
+DB_PATH = os.path.join(os.getcwd(), "Database", "quiz.db")
 DEFAULT_NB_SIPS = 1  # Default value when nbSips not defined
 # endregion
 
@@ -70,6 +70,15 @@ def login():
 # endregion
 
 # region Private routes
+
+
+@app.route('/rebuild-db', methods=['POST'])
+def rebuildDb():
+    message, code = check_user_auth(request.authorization)
+    if code != 200:
+        return message, code
+    db.rebuild_db()
+    return "Ok", 200
 
 
 @app.route('/questions', methods=['POST'])

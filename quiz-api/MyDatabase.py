@@ -9,16 +9,14 @@ class MyDatabase():
     def __init__(self, db_path: str):
         self.connection = sqlite3.connect(
             db_path, check_same_thread=False, isolation_level=None)
+        # IF ERROR THEN cur.execute('rollback')
 
     def close(self):
         self.connection.close()
 
-    def exec(self, request):
-        self.cur.execute("begin")
-        self.cur.execute(request)
-        self.cur.execute("commit")
+    def rebuild_db(self):
+        a=0
 
-        # IF ERROR THEN cur.execute('rollback')
     def getNbQuestions(self):
         cur = self.connection.cursor()
         cur.execute(
