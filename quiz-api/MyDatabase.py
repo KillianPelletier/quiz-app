@@ -44,29 +44,28 @@ class MyDatabase():
         cur.execute(
             f"Select id, text, isCorrect, nbSips from possible_answers Answers Where questionID = {questionID}")
         rows = cur.fetchall()
-        res = []
-        for r in rows:
+        for pa in rows:
             q.possibleAnswers.append(PossibleAnswer(
-                id=r[0], text=r[1], isCorrect=r[2], nbSips=r[3]))
+                id=pa[0], text=pa[1], isCorrect=pa[2], nbSips=pa[3]))
 
         return q
-    
+
     def getQuestionByPosition(self, position):
         cur = self.connection.cursor()
         cur.execute(
             f"Select id, title, image, position, text from questions Where position = {position}")
         result = cur.fetchone()
-        if result is None : return None
+        if result is None:
+            return None
         q = Question(id=result[0], title=result[1],
                      image=result[2], position=result[3], text=result[4])
 
         cur.execute(
             f"Select id, text, isCorrect, nbSips from possible_answers Answers Where questionID = {q.id}")
         rows = cur.fetchall()
-        res = []
-        for r in rows:
+        for pa in rows:
             q.possibleAnswers.append(PossibleAnswer(
-                id=result[0], text=result[1], isCorrect=result[2], nbSips=result[3]))
+                id=pa[0], text=pa[1], isCorrect=pa[2], nbSips=pa[3]))
 
         return q
 

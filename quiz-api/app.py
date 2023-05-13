@@ -41,8 +41,9 @@ def getQuestionByPosition():
     if question is None:
         return {"error": f"Question with position = {position} not found"}, 404
     else:
-        return {"question": question.toJSON()}, 200
-    
+        return question.toJSON(), 200
+
+
 @app.route('/questions/<questionId>', methods=['GET'])
 def getQuestionByID(questionId):
     questionId = int(questionId)
@@ -107,6 +108,7 @@ def deleteAllQuestions():
 
     db.deleteAllQuestions()
     return {}, 204
+
 
 @app.route('/participations/all', methods=['DELETE'])
 def deleteAllParticipations():
