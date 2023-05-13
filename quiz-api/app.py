@@ -36,8 +36,12 @@ def getQuizInfo():
 
 @app.route('/questions/<questionId>', methods=['GET'])
 def getQuestionByID(questionId):
-    question = db.getQuestionByID(int(questionId))
-    return {"question": question.toJSON()}, 200
+    questionId = int(questionId)
+    question = db.getQuestionByID(questionId)
+    if question is None:
+        return {"error": f"Question with id = {questionId} not found"}, 404
+    else:
+        return {"question": question.toJSON()}, 200
 
 
 @app.route('/login', methods=['POST'])

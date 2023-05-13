@@ -38,7 +38,8 @@ class MyDatabase():
         cur = self.connection.cursor()
         cur.execute(
             f"Select id, title, image, position, text from questions Where id = {questionID}")
-        result = cur.fetchall()[0]
+        result = cur.fetchone()
+        if result is None : return None
         q = Question(id=result[0], title=result[1],
                      image=result[2], position=result[3], text=result[4])
 
