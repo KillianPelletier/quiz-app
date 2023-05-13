@@ -34,6 +34,15 @@ def getQuizInfo():
     return {"size": len(participationResults), "scores": [p.toJSON() for p in participationResults]}, 200
 
 
+@app.route('/questions', methods=['GET'])
+def getQuestionByPosition():
+    position = int(request.args.get('position'))
+    question = db.getQuestionByPosition(position)
+    if question is None:
+        return {"error": f"Question with position = {position} not found"}, 404
+    else:
+        return {"question": question.toJSON()}, 200
+    
 @app.route('/questions/<questionId>', methods=['GET'])
 def getQuestionByID(questionId):
     questionId = int(questionId)

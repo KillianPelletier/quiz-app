@@ -52,6 +52,25 @@ class MyDatabase():
                 id=result[0], text=result[1], isCorrect=result[2], nbSips=result[3]))
 
         return q
+    
+    def getQuestionByPosition(self, position):
+        cur = self.connection.cursor()
+        cur.execute(
+            f"Select id, title, image, position, text from questions Where position = {position}")
+        result = cur.fetchone()
+        if result is None : return None
+        q = Question(id=result[0], title=result[1],
+                     image=result[2], position=result[3], text=result[4])
+
+        cur.execute(
+            f"Select id, text, isCorrect, nbSips from possible_answers Answers Where questionID = {q.id}")
+        rows = cur.fetchall()
+        res = []
+        for r in rows:
+            q.possibleAnswers.append(PossibleAnswer(
+                id=result[0], text=result[1], isCorrect=result[2], nbSips=result[3]))
+
+        return q
 
     def addQuestion(self, q: Question):
         cur = self.connection.cursor()
