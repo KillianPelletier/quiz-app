@@ -7,11 +7,8 @@ from PossibleAnswer import *
 class MyDatabase():
 
     def __init__(self, db_path: str):
-        self.connection = sqlite3.connect(db_path, check_same_thread=False)
-
-        # set the sqlite connection in "manual transaction mode"
-        # (by default, all execute calls are performed in their own transactions, not what we want)
-        self.connection.isolation_level = None
+        self.connection = sqlite3.connect(
+            db_path, check_same_thread=False, isolation_level=None)
 
     def close(self):
         self.connection.close()
@@ -39,7 +36,8 @@ class MyDatabase():
         cur.execute(
             f"Select id, title, image, position, text from questions Where id = {questionID}")
         result = cur.fetchone()
-        if result is None : return None
+        if result is None:
+            return None
         q = Question(id=result[0], title=result[1],
                      image=result[2], position=result[3], text=result[4])
 
@@ -49,7 +47,7 @@ class MyDatabase():
         res = []
         for r in rows:
             q.possibleAnswers.append(PossibleAnswer(
-                id=result[0], text=result[1], isCorrect=result[2], nbSips=result[3]))
+                id=r[0], text=r[1], isCorrect=r[2], nbSips=r[3]))
 
         return q
     
@@ -74,10 +72,35 @@ class MyDatabase():
 
     def addQuestion(self, q: Question):
         cur = self.connection.cursor()
-        cur.execute("begin")
+        cur.execute("Begin")
         cur.execute(
             "Insert into questions (title, image, position, text) values (?, ?, ?, ?)",
             (q.title, q.image, q.position, q.text))
         q.id = cur.lastrowid
-        cur.execute('commit')
-        return cur.lastrowid
+        cur.executemany(
+            "Insert into possible_answers (text, isCorrect, nbSips, questionId) values (?, ?, ?, ?)", [(pa.text, pa.isCorrect, pa.nbSips, q.id) for pa in q.possibleAnswers])
+        cur.execute('Commit')
+
+    def deleteQuestion(self, questionId: int):
+        cur = self.connection.cursor()
+        cur.execute("Begin")
+        cur.execute(
+            f"Delete from possible_answers Where questionId = {questionId}")
+        cur.execute(
+            f"Delete from questions Where id = {questionId}")
+        rowCount = cur.rowcount
+        cur.execute('Commit')
+        return rowCount == 1
+
+    def deleteAllQuestions(self):
+        cur = self.connection.cursor()
+        cur.execute("Begin")
+        cur.execute("Delete From possible_answers")
+        cur.execute("Delete From questions")
+        cur.execute('Commit')
+
+    def deleteAllParticipations(self):
+        cur = self.connection.cursor()
+        cur.execute("Begin")
+        cur.execute("Delete From participation_results")
+        cur.execute('Commit')
