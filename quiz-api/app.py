@@ -1,19 +1,22 @@
-from flask import Flask, request, Response
+from flask import Flask, request
 from Utils.jwt_utils import *
 from flask_cors import CORS
 import hashlib
-from Participation import *
-from Question import *
-from PossibleAnswer import *
-from MyDatabase import *
-import os
+
+from Models.Question import Question as QuestionQuiz
+from Models.Participation import Participation as ParticipationQuiz
+from Models.PossibleAnswer import PossibleAnswer as PossibleAnswerQuiz
+
+from Database.MyDatabase import *
 from datetime import date
+import os
 
 # region Variable
-# "flask2023"
-PWD_MD5 = b'\xd8\x17\x06PG\x92\x93\xc1.\x02\x01\xe5\xfd\xf4_@'
+
+PWD_MD5 = b'\xd8\x17\x06PG\x92\x93\xc1.\x02\x01\xe5\xfd\xf4_@'  # "flask2023"
 DB_PATH = os.path.join(os.getcwd(), "Database", "quiz.db")
 DEFAULT_NB_SIPS = 1  # Default value when nbSips not defined
+
 # endregion
 
 app = Flask(__name__)
@@ -32,6 +35,7 @@ def index():
 
 @app.route('/quiz-info', methods=['GET'])
 def getQuizInfo():
+    """Return quiz information"""
     nbQuestions = db.getNbQuestions()
     participationResults = db.getParticipationResults()
     return {"size": nbQuestions, "scores": [p.toJSON() for p in participationResults]}, 200
@@ -39,26 +43,27 @@ def getQuizInfo():
 
 @app.route('/questions', methods=['GET'])
 def getQuestionByPosition():
+    """Return question data by quiz position"""
     position = int(request.args.get('position'))
     question = db.getQuestionByPosition(position)
     if question is None:
         return {"error": f"Question with position = {position} not found"}, 404
-    else:
-        return question.toJSON(), 200
+    return question.toJSON(), 200
 
 
 @app.route('/questions/<questionId>', methods=['GET'])
 def getQuestionByID(questionId):
+    """Return question data by Id"""
     questionId = int(questionId)
     question = db.getQuestionByID(questionId)
     if question is None:
         return {"error": f"Question with id = {questionId} not found"}, 404
-    else:
-        return question.toJSON(), 200
+    return question.toJSON(), 200
 
 
 @app.route('/login', methods=['POST'])
 def login():
+    """Login route"""
     payload = request.get_json()
     pwd = payload['password'].encode('UTF-8')
     pwd_hashed = hashlib.md5(pwd).digest()
@@ -68,31 +73,28 @@ def login():
     else:
         return 'Unauthorized', 401
 
+
 @app.route('/participations', methods=['POST'])
 def participations():
-    # message, code = check_user_auth(request.authorization)
-    # if code != 200:
-    #     return message, code
-
+    """Submit player participation and return correct answers and score"""
     payload = request.get_json()
-    participation = Participation(playerName=payload['playerName'], score=0,
-                         date=date.today().strftime("%d/%m/%Y"))
-    
+    participation = ParticipationQuiz(playerName=payload['playerName'], score=0,
+                                      date=date.today().strftime("%d/%m/%Y"))
+
     for pa in payload['answers']:
         participation.answersSummaries.append(pa)
 
     nbQuestion = db.getNbQuestion()
     nbAnswers = len(participation.answersSummaries)
-    if(nbQuestion ==nbAnswers ):
-        participation =db.addParticipation(participation) 
-        return participation.toJSON(), 200
-    elif(nbQuestion > nbAnswers):
+
+    if nbQuestion > nbAnswers:
         return 'Not enought answers', 400
-    else:
-        return 'Too many questions', 400    
-    
-    
-        
+    if nbQuestion < nbAnswers:
+        return 'Too many questions', 400
+
+    participation = db.addParticipation(participation)
+    return participation.toJSON(), 200
+
 
 # endregion
 
@@ -101,6 +103,7 @@ def participations():
 
 @app.route('/rebuild-db', methods=['POST'])
 def rebuildDb():
+    """Delete then create database"""
     message, code = check_user_auth(request.authorization)
     if code != 200:
         return message, code
@@ -110,15 +113,16 @@ def rebuildDb():
 
 @app.route('/questions', methods=['POST'])
 def addQuestion():
+    """Add question in quiz"""
     message, code = check_user_auth(request.authorization)
     if code != 200:
         return message, code
 
     payload = request.get_json()
-    question = Question(id=None, title=payload['title'], image=payload['image'],
-                        position=payload['position'], text=payload['text'])
+    question = QuestionQuiz(id=None, title=payload['title'], image=payload['image'],
+                            position=payload['position'], text=payload['text'])
     for pa in payload['possibleAnswers']:
-        question.possibleAnswers.append(PossibleAnswer(
+        question.possibleAnswers.append(PossibleAnswerQuiz(
             id=None, text=pa['text'], isCorrect=pa['isCorrect'], nbSips=pa.get('nbSips', DEFAULT_NB_SIPS)))
     db.addQuestion(question)
     return {"id": question.id}, 200
@@ -126,16 +130,17 @@ def addQuestion():
 
 @app.route('/questions/<questionId>', methods=['PUT'])
 def updateQuestion(questionId):
+    """Update quiz question"""
     questionId = int(questionId)
     message, code = check_user_auth(request.authorization)
     if code != 200:
         return message, code
 
     payload = request.get_json()
-    question = Question(id=questionId, title=payload['title'], image=payload['image'],
-                        position=payload['position'], text=payload['text'])
+    question = QuestionQuiz(id=questionId, title=payload['title'], image=payload['image'],
+                            position=payload['position'], text=payload['text'])
     for pa in payload['possibleAnswers']:
-        question.possibleAnswers.append(PossibleAnswer(
+        question.possibleAnswers.append(PossibleAnswerQuiz(
             id=None, text=pa['text'], isCorrect=pa['isCorrect'], nbSips=pa.get('nbSips', DEFAULT_NB_SIPS)))
 
     success = db.updateQuestion(question)
@@ -147,6 +152,7 @@ def updateQuestion(questionId):
 
 @app.route('/questions/<questionId>', methods=['DELETE'])
 def deleteQuestion(questionId):
+    """Delete question from quiz"""
     questionId = int(questionId)
     message, code = check_user_auth(request.authorization)
     if code != 200:
@@ -161,6 +167,7 @@ def deleteQuestion(questionId):
 
 @app.route('/questions/all', methods=['DELETE'])
 def deleteAllQuestions():
+    """Delete all quiz question"""
     message, code = check_user_auth(request.authorization)
     if code != 200:
         return message, code
@@ -171,13 +178,13 @@ def deleteAllQuestions():
 
 @app.route('/participations/all', methods=['DELETE'])
 def deleteAllParticipations():
+    """Delete all player participations"""
     message, code = check_user_auth(request.authorization)
     if code != 200:
         return message, code
 
     db.deleteAllParticipations()
     return {}, 204
-
 
 # endregion
 

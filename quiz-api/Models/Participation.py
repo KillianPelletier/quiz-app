@@ -7,4 +7,4 @@ class Participation():
         self.answersSummaries = []
 
     def toJSON(self):
-        return {"playerName": self.playerName, "score": self.score, "date": self.date,"answersSummaries": self.answersSummaries}
+        return {"playerName": self.playerName, "score": self.score, "date": self.date, "answersSummaries": self.answersSummaries}
