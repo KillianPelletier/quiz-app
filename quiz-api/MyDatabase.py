@@ -15,7 +15,52 @@ class MyDatabase():
         self.connection.close()
 
     def rebuild_db(self):
-        a=0
+        cur = self.connection.cursor()
+        cur.execute("Begin")
+        cur.execute(
+            "Drop Table If Exists possible_answers")
+        cur.execute(
+            "Drop Table If Exists questions")
+        cur.execute(
+            "Drop Table If Exists participation_results")
+        cur.execute('''
+            CREATE TABLE questions
+            (
+                id INTEGER NOT NULL,
+                title TEXT NOT NULL,
+                image TEXT,
+                position INTEGER,
+                text TEXT,
+
+                CONSTRAINT pk_qu_id PRIMARY KEY(id)
+            )
+        ''')
+        cur.execute('''
+            CREATE TABLE possible_answers
+            (
+                id INTEGER NOT NULL,
+                text TEXT NOT NULL,
+                isCorrect INTEGER,
+                nbSips INTEGER,
+                questionId INTEGER NOT NULL,
+
+                CONSTRAINT pk_an_id PRIMARY KEY (id),
+                CONSTRAINT isCorrect_ck CHECK (isCorrect BETWEEN 0 AND 1),
+                CONSTRAINT fk_qu_id FOREIGN KEY (questionId) REFERENCES questions(id)
+            );
+        ''')
+        cur.execute('''
+            CREATE TABLE participation_results
+            (
+                id INTEGER NOT NULL,
+                score REAL,
+                playerName TEXT,
+                date TEXT,
+
+                CONSTRAINT pk_sc_id PRIMARY KEY (id)
+            );
+        ''')
+        cur.execute("Commit")
 
     def getNbQuestions(self):
         cur = self.connection.cursor()
