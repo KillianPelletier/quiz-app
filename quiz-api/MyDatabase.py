@@ -4,7 +4,6 @@ from Question import *
 from PossibleAnswer import *
 
 
-
 class MyDatabase():
 
     def __init__(self, db_path: str):
@@ -23,7 +22,7 @@ class MyDatabase():
         cur.execute(
             "Drop Table If Exists questions")
         cur.execute(
-            "Drop Table If Exists participation_results")
+            "Drop Table If Exists participations")
         cur.execute('''
             CREATE TABLE questions
             (
@@ -51,7 +50,7 @@ class MyDatabase():
             );
         ''')
         cur.execute('''
-            CREATE TABLE participation_results
+            CREATE TABLE participations
             (
                 id INTEGER NOT NULL,
                 score REAL,
@@ -192,10 +191,10 @@ class MyDatabase():
 
     def addParticipation(self, p: Participation):
 
-        for i in range(0,len(p.answersSummaries)):
+        for i in range(0, len(p.answersSummaries)):
             q = self.getQuestionByPosition(i+1)
             for j in range(0, len(q.possibleAnswers)):
-                if(q.possibleAnswers[j].isCorrect == True and p.answersSummaries[i] == j+1):
+                if (q.possibleAnswers[j].isCorrect == True and p.answersSummaries[i] == j+1):
                     p.score += 1
                     break
 
@@ -208,13 +207,13 @@ class MyDatabase():
         cur.execute('Commit')
         return p
 
-    def getNbQuestion(self):        
-        cur =self.connection.cursor()
+    def getNbQuestion(self):
+        cur = self.connection.cursor()
         cur.execute(
             "Select id, title, image, position, text from questions")
         rows = cur.fetchall()
-        return len(rows) 
-    
+        return len(rows)
+
     # increment : 1 or -1
     def updateQuestionPosition(self, increment: int, startAtPos: int, endAtPos: int = -1):
         cur = self.connection.cursor()
