@@ -1,7 +1,8 @@
 import sqlite3
-from ParticipationResult import *
+from Participation import *
 from Question import *
 from PossibleAnswer import *
+
 
 
 class MyDatabase():
@@ -23,11 +24,11 @@ class MyDatabase():
     def getParticipationResults(self):
         cur = self.connection.cursor()
         cur.execute(
-            "Select playerName, score, date from participation_results Order By score Desc")
+            "Select playerName, score, date from participations Order By score Desc")
         rows = cur.fetchall()
         res = []
         for r in rows:
-            res.append(ParticipationResult(
+            res.append(Participation(
                 playerName=r[0], score=r[1], date=r[2]))
         return res
 
@@ -101,5 +102,31 @@ class MyDatabase():
     def deleteAllParticipations(self):
         cur = self.connection.cursor()
         cur.execute("Begin")
-        cur.execute("Delete From participation_results")
+        cur.execute("Delete From participations")
         cur.execute('Commit')
+
+    def addParticipation(self, p: Participation):
+
+        for i in range(0,len(p.answersSummaries)):
+            q = self.getQuestionByPosition(i+1)
+            for j in range(0, len(q.possibleAnswers)):
+                if(q.possibleAnswers[j].isCorrect == True and p.answersSummaries[i] == j+1):
+                    p.score += 1
+                    break
+
+        cur = self.connection.cursor()
+        cur.execute("Begin")
+        cur.execute(
+            "Insert into participations (score, playerName, date) values (?, ?, ?)",
+            (p.score, p.playerName, p.date,))
+        p.id = cur.lastrowid
+        cur.execute('Commit')
+        return p
+
+    def getNbQuestion(self):        
+        cur =self.connection.cursor()
+        cur.execute(
+            "Select id, title, image, position, text from questions")
+        rows = cur.fetchall()
+        return len(rows) 
+    

@@ -2,11 +2,12 @@ from flask import Flask, request
 from Utils.jwt_utils import *
 from flask_cors import CORS
 import hashlib
-from ParticipationResult import *
+from Participation import *
 from Question import *
 from PossibleAnswer import *
 from MyDatabase import *
 import os
+from datetime import date
 
 # region Variable
 # "flask2023"
@@ -64,6 +65,32 @@ def login():
         return {"token": token}, 200
     else:
         return 'Unauthorized', 401
+
+@app.route('/participations', methods=['POST'])
+def participations():
+    # message, code = check_user_auth(request.authorization)
+    # if code != 200:
+    #     return message, code
+
+    payload = request.get_json()
+    participation = Participation(playerName=payload['playerName'], score=0,
+                         date=date.today().strftime("%d/%m/%Y"))
+    
+    for pa in payload['answers']:
+        participation.answersSummaries.append(pa)
+
+    nbQuestion = db.getNbQuestion()
+    nbAnswers = len(participation.answersSummaries)
+    if(nbQuestion ==nbAnswers ):
+        participation =db.addParticipation(participation) 
+        return participation.toJSON(), 200
+    elif(nbQuestion > nbAnswers):
+        return 'Not enought answers', 400
+    else:
+        return 'Too many questions', 400    
+    
+    
+        
 
 # endregion
 
