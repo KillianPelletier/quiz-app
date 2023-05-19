@@ -124,6 +124,8 @@ def addQuestion():
     for pa in payload['possibleAnswers']:
         question.possibleAnswers.append(PossibleAnswerQuiz(
             id=None, text=pa['text'], isCorrect=pa['isCorrect'], nbSips=pa.get('nbSips', DEFAULT_NB_SIPS)))
+    if (not question.isValid(db)):
+        return {"error": "Question isn't valid : it must contain one correct answer and its position should be between 1 and number of questions."}, 400
     db.addQuestion(question)
     return {"id": question.id}, 200
 
@@ -142,7 +144,8 @@ def updateQuestion(questionId):
     for pa in payload['possibleAnswers']:
         question.possibleAnswers.append(PossibleAnswerQuiz(
             id=None, text=pa['text'], isCorrect=pa['isCorrect'], nbSips=pa.get('nbSips', DEFAULT_NB_SIPS)))
-
+    if (not question.isValid(db)):
+        return {"error": "Question isn't valid : it must contain one correct answer and its position should be between 1 and number of questions."}, 400
     success = db.updateQuestion(question)
     if success:
         return {}, 204

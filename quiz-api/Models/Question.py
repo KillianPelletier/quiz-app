@@ -11,3 +11,9 @@ class Question():
 
     def toJSON(self):
         return {"id": self.id, "title": self.title, "image": self.image, "position": self.position, "text": self.text, "possibleAnswers": [p.toJSON() for p in self.possibleAnswers]}
+
+    def isValid(self, db):
+        nbCorrectAnswer = sum(
+            map(lambda pa: pa.isCorrect, self.possibleAnswers))
+        nbQuestions = db.getNbQuestion()
+        return nbCorrectAnswer == 1 and 1 <= self.position <= (nbQuestions+1)
