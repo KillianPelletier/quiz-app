@@ -14,7 +14,7 @@ import os
 # region Variable
 
 PWD_MD5 = b'\xd8\x17\x06PG\x92\x93\xc1.\x02\x01\xe5\xfd\xf4_@'  # "flask2023"
-DB_PATH = os.path.join(os.getcwd(), "Database", "quiz.db")
+DB_PATH = os.path.join(os.getcwd(), "quiz.db")
 DEFAULT_NB_SIPS = 1  # Default value when nbSips not defined
 
 # endregion
