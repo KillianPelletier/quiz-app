@@ -31,6 +31,7 @@ export default {
     return this.call("get", "quiz-info");
   },
   getQuestion(position) {
-    // not implemented
+    let result = this.call("get", "questions?position="+position);
+    return result;
   }
 };
