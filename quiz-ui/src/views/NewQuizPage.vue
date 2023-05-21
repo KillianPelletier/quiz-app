@@ -2,7 +2,7 @@
 <template>
   <div>
     <p>Saisissez votre nom : </p>
-    <input type="text" v-model="username">
+    <input type="text" v-model="playerName">
     <button @click="launchNewQuiz">Go !</button>
   </div>
 </template>
@@ -15,14 +15,14 @@ export default {
 
   data() {
     return {
-      username:''
+      playerName:''
     }
   },
 
   methods:{
     launchNewQuiz(){
-      participationStorageService.savePlayerName(this.username);
-      console.log("Launch new quiz with", this.username);
+      participationStorageService.savePlayerName(this.playerName);
+      console.log("Launch new quiz with", this.playerName);
       this.$router.push('/questions');
     },
   },

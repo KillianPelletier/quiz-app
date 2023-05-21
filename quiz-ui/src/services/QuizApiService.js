@@ -2,7 +2,7 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}`,
-  json: true
+  json: true,
 });
 
 export default {
@@ -31,7 +31,15 @@ export default {
     return this.call("get", "quiz-info");
   },
   getQuestion(position) {
-    let result = this.call("get", "questions?position="+position);
+    let result = this.call("get", "questions?position=" + position);
     return result;
-  }
+  },
+  sendParticipation(answers, username) {
+    let data = {
+      answers: answers,
+      playerName: username,
+    };
+    let result = this.call("post", "participations", data);
+    return result;
+  },
 };

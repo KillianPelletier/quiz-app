@@ -1,10 +1,11 @@
 <template>
+  <h3>{{question.title }}</h3>
+  <p>{{question.text}}</p>
   <img v-if="question.image" :src="question.image" />
 
-  <a @click="$emit('answer-selected', 0)">La réponse A</a>
-  <a @click="$emit('answer-selected', 1)">La réponse B</a>
-  <a @click="$emit('answer-selected', 2)">La réponse C</a>
-  <a @click="$emit('answer-selected', 3)">La réponse D</a>
+  <div v-for="(pa, index) in question.possibleAnswers" v-bind:key="pa.id">
+    <a @click="$emit('click-on-answer', index+1)">{{pa.text}}</a>
+  </div>
 
 </template>
 
@@ -15,6 +16,6 @@
         type: Object
       }
     },
-    emits: ["answer-selected"]
+    emits: ["click-on-answer"]
   }
 </script>

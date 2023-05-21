@@ -6,7 +6,7 @@ export default {
     window.localStorage.setItem("playerName", playerName);
   },
   getPlayerName() {
-    // todo : implement
+    return window.localStorage.getItem("playerName");
   },
   saveParticipationScore(participationScore) {
     // todo : implement
