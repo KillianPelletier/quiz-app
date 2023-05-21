@@ -22,9 +22,10 @@ export default {
   },
 
   async created() {
-    var quizInfoApiResult = await quizApiService.getQuizInfo();
-    var quizInfo = quizInfoApiResult.data.scores;
-    this.registeredScores = quizInfo.data.scores;
+    let quizInfoApiResult = await quizApiService.getQuizInfo();
+    let data = quizInfoApiResult.data;
+    this.registeredScores = data.scores;
+    //let nbQuestions = data.size;
     console.log("Composant Home page 'created'");
   }
 };
