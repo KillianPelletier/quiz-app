@@ -156,12 +156,17 @@ class MyDatabase():
 
     def addParticipation(self, p: ParticipationQuiz):
 
-        for i in range(0, len(p.answersSummaries)):
+        for i in range(0, len(p.playerAnswers)):
             q = self.getQuestionByPosition(i+1)
             for j in range(0, len(q.possibleAnswers)):
-                if (q.possibleAnswers[j].isCorrect == True and p.answersSummaries[i] == j+1):
-                    p.score += 1
-                    break
+                if (q.possibleAnswers[j].isCorrect == True):
+                    if(p.playerAnswers[i] == j+1):
+                        p.answersSummaries.append([j+1,True])
+                        p.score += 1
+                        break
+                    else:
+                        p.answersSummaries.append([j+1,False])
+
 
         cur = self.connection.cursor()
         cur.execute("Begin")

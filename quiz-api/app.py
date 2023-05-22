@@ -82,10 +82,10 @@ def participations():
                                       date=date.today().strftime("%d/%m/%Y"))
 
     for pa in payload['answers']:
-        participation.answersSummaries.append(pa)
+        participation.playerAnswers.append(pa)
 
     nbQuestion = db.getNbQuestion()
-    nbAnswers = len(participation.answersSummaries)
+    nbAnswers = len(participation.playerAnswers)
 
     if nbQuestion > nbAnswers:
         return 'Not enought answers', 400
