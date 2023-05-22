@@ -50,7 +50,7 @@ def getQuestionByPosition():
         return {"error": f"Question with position = {position} not found"}, 404
     return question.toJSON(), 200
 
-@app.route('/questions/all', methods=['GET'])
+@app.route('/questions-all', methods=['GET'])
 def getQuestions():
     """Return all questions data"""
     questions= db.getAllQuestions()
