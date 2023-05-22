@@ -21,6 +21,7 @@ export default {
 
   methods:{
     launchNewQuiz(){
+      participationStorageService.clear();
       participationStorageService.savePlayerName(this.playerName);
       console.log("Launch new quiz with", this.playerName);
       this.$router.push('/questions');
