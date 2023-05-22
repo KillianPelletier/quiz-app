@@ -4,6 +4,7 @@ const instance = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}`,
   json: true,
 });
+import participationStorageService from "@/services/participationStorageService";
 
 export default {
   async call(method, resource, data = null, token = null) {
@@ -24,6 +25,10 @@ export default {
         return { status: response.status, data: response.data };
       })
       .catch((error) => {
+        if (error.response.status == 401) {
+          participationStorageService.clear();
+          this.$router.push("/login");
+        }
         return { error: error };
       });
   },
@@ -41,8 +46,10 @@ export default {
     let result = this.call("post", "login", data);
     return result;
   },
-  getAllQuestions() {
-    let result = this.call("get", "allQuestions");
-    return result;
+  getAllQuestions(token) {
+    return this.call("get", "questions-all", null, token);
+  },
+  deleteQuestion(id, token) {
+    return this.call("delete", "questions/" + id, null, token);
   },
 };
