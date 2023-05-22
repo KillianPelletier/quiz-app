@@ -12,4 +12,4 @@ class Participation():
 
     def summaryToJSON(self,answer):
         #test = list(answer)
-        return{"correctAnswerPosition":answer[0], "isCorrect":answer[1]}
+        return{"correctAnswerPosition":answer[0], "wasCorrect":answer[1]}

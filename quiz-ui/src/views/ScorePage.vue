@@ -4,7 +4,7 @@
 
   <h4>Votre position {{ playerIndex + 1 }} sur {{ registeredScores.length }}</h4>
   <div v-for="(answer, index) in participation.answersSummaries" v-bind:key="index">
-    {{ index + ". "+answer.correctAnswerPosition + " " + answer.wasCorrect?"&#9989;":"&#10060;" }}
+    {{ index }}. {{ answer.correctAnswerPosition }} {{ (answer.wasCorrect)?"&#9989;":"&#10060;" }}
   </div>
 
   <div v-for="(scoreEntry, index) in registeredScores" v-bind:key="scoreEntry.date" v-bind:class = "(index == playerIndex)?'playerScore':''">
