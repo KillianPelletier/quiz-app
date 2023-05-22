@@ -43,7 +43,8 @@
         console.log("Quiz finished");
         let playerName = participationStorageService.getPlayerName();
         let result = await quizApiService.sendParticipation(this.answers, playerName);
-        console.log(result);
+        participationStorageService.saveParticipation(JSON.stringify(result.data))
+        this.$router.push('/score');
       }
     },
 
