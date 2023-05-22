@@ -24,7 +24,7 @@ export default {
         return { status: response.status, data: response.data };
       })
       .catch((error) => {
-        console.error(error);
+        return { error: error };
       });
   },
   getQuizInfo() {
@@ -34,12 +34,15 @@ export default {
     let result = this.call("get", "questions?position=" + position);
     return result;
   },
-  sendParticipation(answers, username) {
+  generateJWTToken(password) {
     let data = {
-      answers: answers,
-      playerName: username,
+      password: password,
     };
-    let result = this.call("post", "participations", data);
+    let result = this.call("post", "login", data);
+    return result;
+  },
+  getAllQuestions() {
+    let result = this.call("get", "allQuestions");
     return result;
   },
 };

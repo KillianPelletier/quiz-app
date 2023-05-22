@@ -14,4 +14,10 @@ export default {
   getParticipation() {
     return window.localStorage.getItem("participation");
   },
+  saveJWTToken(jwtToken) {
+    window.localStorage.setItem("jwtToken", jwtToken);
+  },
+  getJWTToken() {
+    return window.localStorage.getItem("jwtToken");
+  },
 };
