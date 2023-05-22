@@ -81,6 +81,28 @@ class MyDatabase():
                 id=pa[0], text=pa[1], isCorrect=pa[2], nbSips=pa[3]))
 
         return q
+    
+    def getAllQuestions(self):
+        cur = self.connection.cursor()
+        cur.execute(
+            f"Select id, title, image, position, text from questions Order By position")
+        questionsResult = cur.fetchall()
+        if questionsResult is None:
+            return None
+        result = []
+        for ques in questionsResult:
+            q = QuestionQuiz(id=ques[0], title=ques[1],
+                        image=ques[2], position=ques[3], text=ques[4])
+            cur.execute(
+                f"Select id, text, isCorrect, nbSips from possible_answers Answers Where questionID = {q.id}")
+            rows = cur.fetchall()
+            for pa in rows:
+                q.possibleAnswers.append(PossibleAnswerQuiz(
+                    id=pa[0], text=pa[1], isCorrect=pa[2], nbSips=pa[3]))
+                
+            result.append(q)
+
+        return result
 
     def addQuestion(self, q: QuestionQuiz):
         cur = self.connection.cursor()
