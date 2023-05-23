@@ -1,7 +1,9 @@
 
 <template>
-  <h1>Admin</h1>
+  
   <div>
+    <h1>Admin</h1>
+    <button @click="deconnection">Déconnexion</button>
     <table>
       <tr>
         <th>Position</th>
@@ -69,7 +71,13 @@ export default {
       else {
         this.idShowQuestionDetail = -1;
       }
+    },
+
+    async deconnection(){
+      participationStorageService.clearJWTToken();
+      this.$router.push('/');
     }
+    
   },
 
   async created() {
@@ -84,6 +92,8 @@ export default {
 
     console.log("Composant Login page 'created'");
   }
+
+  
 };
 </script>
 

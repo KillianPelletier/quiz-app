@@ -20,4 +20,7 @@ export default {
   getJWTToken() {
     return window.localStorage.getItem("jwtToken");
   },
+  clearJWTToken() {  
+    window.localStorage.removeItem("jwtToken");
+  },
 };
