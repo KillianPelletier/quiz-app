@@ -39,6 +39,14 @@ export default {
     let result = this.call("get", "questions?position=" + position);
     return result;
   },
+  sendParticipation(answers, username) {
+    let data = {
+      answers: answers,
+      playerName: username,
+    };
+    let result = this.call("post", "participations", data);
+    return result;
+  },
   generateJWTToken(password) {
     let data = {
       password: password,
