@@ -33,7 +33,7 @@ TABLES = {
         CREATE TABLE participations
         (
             id INTEGER NOT NULL,
-            score REAL,
+            score INTEGER,
             playerName TEXT,
             date TEXT,
 

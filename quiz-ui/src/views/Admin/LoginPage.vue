@@ -23,8 +23,7 @@ export default {
 
   methods:{
     async login(){
-      let result
-      result = await quizApiService.generateJWTToken(this.password);
+      let result = await quizApiService.generateJWTToken(this.password);
       if(result.status != 200){
         window.alert("Mot de passe incorrect");
         return;
