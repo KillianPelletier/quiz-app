@@ -11,10 +11,10 @@
   <header>
     <div class="headerCustom">
       <nav class="headerGridContainer">
-        <img src="src/assets/redStar.png" class="headerGridItem">
-        <RouterLink to="/" class="headerGridItem heinekenRed"><h2>Alcoolotestoquizz</h2></RouterLink>
-        <RouterLink to="/about" class="headerGridItem heinekenRed"><h2>About</h2></RouterLink>
-        <RouterLink to="/login" class="headerGridItem heinekenRed"><h2>Admin</h2></RouterLink>
+        
+        <RouterLink to="/" class="headerGridItem heinekenRed"><img src="src/assets/redStar.png"><h2 style="height:100%; text-align: center;">Alcoolotestoquizz</h2></RouterLink>
+        <RouterLink to="/about" class="headerGridItem heinekenRed"><h2 style="height:100%; vertical-align: middle; line-height: 90px;">Nous</h2></RouterLink>
+        <RouterLink to="/login" class="headerGridItem heinekenRed"><h2 style="height:100%; vertical-align: middle; line-height: 90px;">Admin</h2></RouterLink>
       </nav>
     </div>
   </header>
@@ -75,7 +75,7 @@ nav a:first-of-type {
 .headerGridContainer {
   margin-top: 2%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(1, 1fr);
   gap: 1rem;
   padding: 5px;
