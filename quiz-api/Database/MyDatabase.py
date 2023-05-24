@@ -17,7 +17,6 @@ class MyDatabase():
 
     def rebuild_db(self):
         cur = self.connection.cursor()
-        cur.execute("Begin")
         tableNames = list(MyTables.TABLES.keys())
         tableNames.reverse()
         for tableName in tableNames:
@@ -25,7 +24,6 @@ class MyDatabase():
                 f"Drop Table If Exists {tableName}")
         for tableSQL in MyTables.TABLES.values():
             cur.execute(tableSQL)
-        cur.execute("Commit")
 
     def getNbQuestions(self):
         cur = self.connection.cursor()
@@ -52,7 +50,7 @@ class MyDatabase():
         if result is None:
             return None
         q = QuestionQuiz(id=result[0], title=result[1],
-                     image=result[2], position=result[3], text=result[4])
+                         image=result[2], position=result[3], text=result[4])
 
         cur.execute(
             f"Select id, text, isCorrect, nbSips from possible_answers Answers Where questionID = {questionID}")
@@ -71,7 +69,7 @@ class MyDatabase():
         if result is None:
             return None
         q = QuestionQuiz(id=result[0], title=result[1],
-                     image=result[2], position=result[3], text=result[4])
+                         image=result[2], position=result[3], text=result[4])
 
         cur.execute(
             f"Select id, text, isCorrect, nbSips from possible_answers Answers Where questionID = {q.id}")
@@ -81,7 +79,7 @@ class MyDatabase():
                 id=pa[0], text=pa[1], isCorrect=pa[2], nbSips=pa[3]))
 
         return q
-    
+
     def getAllQuestions(self):
         cur = self.connection.cursor()
         cur.execute(
@@ -92,21 +90,20 @@ class MyDatabase():
         result = []
         for ques in questionsResult:
             q = QuestionQuiz(id=ques[0], title=ques[1],
-                        image=ques[2], position=ques[3], text=ques[4])
+                             image=ques[2], position=ques[3], text=ques[4])
             cur.execute(
                 f"Select id, text, isCorrect, nbSips from possible_answers Answers Where questionID = {q.id}")
             rows = cur.fetchall()
             for pa in rows:
                 q.possibleAnswers.append(PossibleAnswerQuiz(
                     id=pa[0], text=pa[1], isCorrect=pa[2], nbSips=pa[3]))
-                
+
             result.append(q)
 
         return result
 
     def addQuestion(self, q: QuestionQuiz):
         cur = self.connection.cursor()
-        cur.execute("Begin")
         # Add 1 to position to all questions to which their position is equal or greater than q.position
         self.updateQuestionPosition(1, q.position)
         cur.execute(
@@ -115,7 +112,6 @@ class MyDatabase():
         q.id = cur.lastrowid
         cur.executemany(
             "Insert into possible_answers (text, isCorrect, nbSips, questionId) values (?, ?, ?, ?)", [(pa.text, pa.isCorrect, pa.nbSips, q.id) for pa in q.possibleAnswers])
-        cur.execute('Commit')
 
     def updateQuestion(self, q: QuestionQuiz):
         cur = self.connection.cursor()
@@ -125,7 +121,6 @@ class MyDatabase():
             return False
         currentPos = res[0]
 
-        cur.execute("Begin")
         newPos = q.position
         if currentPos >= newPos:
             self.updateQuestionPosition(1, newPos, currentPos)
@@ -141,7 +136,6 @@ class MyDatabase():
         cur.executemany(
             "Insert into possible_answers (text, isCorrect, nbSips, questionId) values (?, ?, ?, ?)", [(pa.text, pa.isCorrect, pa.nbSips, q.id) for pa in q.possibleAnswers])
 
-        cur.execute('Commit')
         return True
 
     def deleteQuestion(self, questionId: int):
@@ -153,28 +147,22 @@ class MyDatabase():
 
         position = res[0]
 
-        cur.execute("Begin")
         cur.execute(
             f"Delete from possible_answers Where questionId = {questionId}")
         cur.execute(
             f"Delete from questions Where id = {questionId}")
         # Decrement 1 to position to all questions to which their position is equal or greater than q.position
         self.updateQuestionPosition(-1, position)
-        cur.execute('Commit')
         return True
 
     def deleteAllQuestions(self):
         cur = self.connection.cursor()
-        cur.execute("Begin")
         cur.execute("Delete From possible_answers")
         cur.execute("Delete From questions")
-        cur.execute('Commit')
 
     def deleteAllParticipations(self):
         cur = self.connection.cursor()
-        cur.execute("Begin")
         cur.execute("Delete From participations")
-        cur.execute('Commit')
 
     def addParticipation(self, p: ParticipationQuiz):
 
@@ -182,21 +170,18 @@ class MyDatabase():
             q = self.getQuestionByPosition(i+1)
             for j in range(0, len(q.possibleAnswers)):
                 if (q.possibleAnswers[j].isCorrect == True):
-                    if(p.playerAnswers[i] == j+1):
-                        p.answersSummaries.append([j+1,True])
+                    if (p.playerAnswers[i] == j+1):
+                        p.answersSummaries.append([j+1, True])
                         p.score += 1
                         break
                     else:
-                        p.answersSummaries.append([j+1,False])
-
+                        p.answersSummaries.append([j+1, False])
 
         cur = self.connection.cursor()
-        cur.execute("Begin")
         cur.execute(
             "Insert into participations (score, playerName, date) values (?, ?, ?)",
             (p.score, p.playerName, p.date,))
         p.id = cur.lastrowid
-        cur.execute('Commit')
         return p
 
     def getNbQuestion(self):
