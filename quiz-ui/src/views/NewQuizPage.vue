@@ -1,9 +1,9 @@
 
 <template>
   <div>
-    <p>Saisissez votre nom : </p>
+    <h4>Saisissez votre nom : </h4>
     <input type="text" v-model="playerName">
-    <button @click="launchNewQuiz">Go !</button>
+    <button @click="launchNewQuiz" class="white">Go !</button>
   </div>
 </template>
 
@@ -33,3 +33,7 @@ export default {
   }
 };
 </script>
+
+<style>
+
+</style>

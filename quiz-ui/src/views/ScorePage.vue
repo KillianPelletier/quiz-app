@@ -1,15 +1,20 @@
 
 <template>
-    <h1>Votre score : {{participation.score }}</h1>
+    <h1 class="white">Votre score : {{participation.score }}</h1>
 
   <h4>Votre position {{ playerIndex + 1 }} sur {{ registeredScores.length }}</h4>
   <h4>{{ registeredScores[playerIndex].playerName }} tu bois {{ participation.answersSummaries.length - participation.score }} shot(s)</h4>
+
+  <h3 class="white">Corrections</h3>
   <div v-for="(answer, index) in participation.answersSummaries" v-bind:key="index">
-    {{ index }}. {{ answer.correctAnswerPosition }} {{ (answer.wasCorrect)?"&#9989;":"&#10060;" }}
+    <h6 class="white">Question {{ index + 1}} : Réponse {{ answer.correctAnswerPosition }} {{ (answer.wasCorrect)?"&#9989;":"&#10060;" }}</h6>
   </div>
 
-  <div v-for="(scoreEntry, index) in registeredScores" v-bind:key="scoreEntry.date" v-bind:class = "(index == playerIndex)?'playerScore':''">
-    {{ scoreEntry.playerName }} - {{ scoreEntry.score }}
+  <h3 class="white">Meilleurs Scores</h3>
+  <div class="scoreGridContainer">
+    <div v-for="scoreEntry in registeredScores" v-bind:key="scoreEntry.date" class="scoreGridItem">
+      {{ scoreEntry.playerName }} - <b>{{ Math.round((scoreEntry.score * 0.46) * 100) / 100 }}g/L</b>
+    </div>
   </div>
 
   <RouterLink to="/">Retour à la page principale</RouterLink>

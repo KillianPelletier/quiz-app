@@ -23,6 +23,16 @@ h5{
   color:lightgray;
   text-decoration: underline;
 }
+h5:hover{
+  color:gray;
+}
+
+button{
+  margin-left:5px;
+  background-color:#205527;
+  border-radius: 10%;
+  color:white;
+}
 
 .white{
   color:white;
@@ -101,7 +111,7 @@ header {
   margin-top: 2%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(30, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   gap: 1rem;
   padding: 5px;
   margin-top: 25px;
@@ -118,7 +128,6 @@ header {
 @media (min-width: 1024px) {
   body {
     display: flex;
-    overflow: hidden;
   }
 
   #app {

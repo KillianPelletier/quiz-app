@@ -45,9 +45,4 @@ export default {
 </script>
 
 <style>
-button{
-  margin-left:5px;
-  background-color:#205527;
-  border-radius: 10%;
-}
 </style>
