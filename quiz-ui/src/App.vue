@@ -1,31 +1,34 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+  import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
+  <div class="videoBackground">
+    <video class="videoItself" autoplay muted loop id="myVideo">
+      <source src="src/assets/bulles2.webm" type="video/webm">
+    </video>
+  </div>
   <header>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/login">Admin</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+    <div class="headerCustom">
+      <nav class="headerGridContainer">
+        <RouterLink to="/" class="headerGridItem heinekenRed"><h2>Alcoolotestoquizz</h2></RouterLink>
+        <RouterLink to="/about" class="headerGridItem heinekenRed"><h2>About</h2></RouterLink>
+        <RouterLink to="/login" class="headerGridItem heinekenRed"><h2>Admin</h2></RouterLink>
       </nav>
     </div>
   </header>
 
-  <RouterView />
-  <div>
-    <p>L'abus d'alcool est dangereux pour la santé, à consommer avec modération : </p>
-    <a href="https://sante.gouv.fr/prevention-en-sante/addictions/article/l-addiction-a-l-alcool" target="_blank">En savoir plus</a>
+  <div class="mainContainer">
+    <RouterView />
+  </div>
+
+  <div class="footer">
+    <h4>L'abus d'alcool est dangereux pour la santé à consommer avec modération</h4>
+    <a href="https://sante.gouv.fr/prevention-en-sante/addictions/article/l-addiction-a-l-alcool"><h5>En savoir plus</h5></a>
   </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
 .logo {
   display: block;
   margin: 0 auto 2rem;
@@ -56,11 +59,34 @@ nav a:first-of-type {
   border: 0;
 }
 
+.headerCustom{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width:60%;
+}
+
+.headerGridContainer {
+  margin-top: 2%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  gap: 1rem;
+  padding: 5px;
+}
+
+.headerGridItem {
+  margin: .5rem;
+  text-align: center;
+}
+.headerGridItem :hover{
+  color: #008200;
+}
+
 @media (min-width: 1024px) {
   header {
     display: flex;
     place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
   }
 
   .logo {
@@ -68,6 +94,7 @@ nav a:first-of-type {
   }
 
   header .wrapper {
+    width:100%;
     display: flex;
     place-items: flex-start;
     flex-wrap: wrap;

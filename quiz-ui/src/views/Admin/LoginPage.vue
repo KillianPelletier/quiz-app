@@ -1,10 +1,10 @@
 
 <template>
-  <h1>Login</h1>
+  <h1 class="white">Connexion</h1>
   <div>
-    <p>Saisissez le mot de passe : </p>
+    <h4>Saisissez le mot de passe : </h4>
     <input type="text" v-model="password">
-    <button @click="login">Continuer</button>
+    <button @click="login" class="white">Se connecter</button>
   </div>
 </template>
 
@@ -34,12 +34,20 @@ export default {
   },
 
   async created() {
-    let jwtToken = participationStorageService.getJWTToken();
+    /*let jwtToken = participationStorageService.getJWTToken();
     if(jwtToken != null){
       this.$router.push('/admin');
-    }
+    }*/
 
     console.log("Composant Login page 'created'");
   }
 };
 </script>
+
+<style>
+button{
+  margin-left:5px;
+  background-color:#205527;
+  border-radius: 10%;
+}
+</style>

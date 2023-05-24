@@ -1,12 +1,18 @@
 
 <template>
-  <h1>Home page</h1>
+  
+  <h1 class="white">L'Alcoolotestoquizz</h1>
 
-  <RouterLink to="/start-new-quiz-page">Démarrer le quiz !</RouterLink>
+  <RouterLink to="/start-new-quiz-page" class="routeButton heinekenRed">Démarrer le quiz !</RouterLink>
 
-  <div v-for="scoreEntry in registeredScores" v-bind:key="scoreEntry.date">
-    {{ scoreEntry.playerName }} - {{ scoreEntry.score }}
+
+  <h3 class="white">Meilleurs Scores</h3>
+  <div class="scoreGridContainer">
+    <div v-for="scoreEntry in registeredScores" v-bind:key="scoreEntry.date" class="scoreGridItem">
+      {{ scoreEntry.playerName }} - <b>{{ Math.round((scoreEntry.score * 0.46) * 100) / 100 }}g/L</b>
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -29,3 +35,6 @@ export default {
   }
 };
 </script>
+
+<style>
+</style>
