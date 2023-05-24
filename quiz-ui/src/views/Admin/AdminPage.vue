@@ -66,6 +66,10 @@
                   <input class="mediumField" type="text" name="label" v-model="currentQuestion.text">
                 </div>
 
+                <div>
+                  <ImageUpload @file-change="imageFileChangedHandler" />
+                </div>
+
                 <div style="margin-bottom:10px" v-for="(answer,index) in currentQuestion.possibleAnswers" v-bind:key="answer.id">
                   <p>Réponse {{ index + 1}} : </p>
                   <textarea class="largeField" v-bind:name="'answer'+(index)" v-model="(answer.text)"></textarea>
@@ -98,11 +102,16 @@
 </template>
 
 <script>
+import ImageUpload from "@/views/Admin/ImageUpload.vue";
 import quizApiService from "@/services/QuizApiService";
 import participationStorageService from "@/services/ParticipationStorageService";
 
 export default {
   name: "AdminPage",
+
+  components: {
+      ImageUpload
+    },
 
   data() {
     return {
@@ -230,6 +239,10 @@ export default {
     async deconnection(){
       participationStorageService.clearJWTToken();
       this.$router.push('/');
+    },
+
+    async imageFileChangedHandler(b64String) {
+      this.currentQuestion.image = b64String;
     }
 
   },

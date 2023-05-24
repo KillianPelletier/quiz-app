@@ -16,7 +16,7 @@ import { RouterLink, RouterView } from 'vue-router'
   <RouterView />
   <div>
     <p>L'abus d'alcool est dangereux pour la santé à consommer avec modération : </p>
-    <a href="https://sante.gouv.fr/prevention-en-sante/addictions/article/l-addiction-a-l-alcool">En savoir plus</a>
+    <a href="https://sante.gouv.fr/prevention-en-sante/addictions/article/l-addiction-a-l-alcool" target="_blank">En savoir plus</a>
   </div>
 </template>
 
