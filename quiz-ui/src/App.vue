@@ -11,6 +11,7 @@
   <header>
     <div class="headerCustom">
       <nav class="headerGridContainer">
+        <img src="src/assets/redStar.png" class="headerGridItem">
         <RouterLink to="/" class="headerGridItem heinekenRed"><h2>Alcoolotestoquizz</h2></RouterLink>
         <RouterLink to="/about" class="headerGridItem heinekenRed"><h2>About</h2></RouterLink>
         <RouterLink to="/login" class="headerGridItem heinekenRed"><h2>Admin</h2></RouterLink>
@@ -29,6 +30,11 @@
 </template>
 
 <style scoped>
+
+img{
+  max-width: 50px;
+  max-height:50px;
+}
 .logo {
   display: block;
   margin: 0 auto 2rem;
@@ -63,13 +69,13 @@ nav a:first-of-type {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width:60%;
+  width:80%;
 }
 
 .headerGridContainer {
   margin-top: 2%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(1, 1fr);
   gap: 1rem;
   padding: 5px;
