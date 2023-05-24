@@ -13,7 +13,7 @@
   <h3 class="white">Meilleurs Scores</h3>
   <div class="scoreGridContainer">
     <div v-for="scoreEntry in registeredScores" v-bind:key="scoreEntry.date" class="scoreGridItem">
-      {{ scoreEntry.playerName }} - <b>{{ Math.round((scoreEntry.score * 0.46) * 100) / 100 }}g/L</b>
+      {{ scoreEntry.playerName }} - <b>{{ Math.round((( participation.answersSummaries.length - scoreEntry.score) * 0.46) * 100) / 100 }}g/L</b>
     </div>
   </div>
 

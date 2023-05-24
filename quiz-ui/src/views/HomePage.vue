@@ -9,7 +9,7 @@
   <h3 class="white">Meilleurs Scores</h3>
   <div class="scoreGridContainer">
     <div v-for="scoreEntry in registeredScores" v-bind:key="scoreEntry.date" class="scoreGridItem">
-      {{ scoreEntry.playerName }} - <b>{{ Math.round((scoreEntry.score * 0.46) * 100) / 100 }}g/L</b>
+      {{ scoreEntry.playerName }} - <b>{{ Math.round(((this.size - scoreEntry.score) * 0.46) * 100) / 100 }}g/L</b>
     </div>
   </div>
 
@@ -23,7 +23,8 @@ export default {
 
   data() {
     return {
-      registeredScores: []
+      registeredScores: [],
+      size:0
     }
   },
 
@@ -31,6 +32,7 @@ export default {
     let quizInfoApiResult = await quizApiService.getQuizInfo();
     let data = quizInfoApiResult.data;
     this.registeredScores = data.scores;
+    this.size = data.size;
     console.log("Composant Home page 'created'");
   }
 };
