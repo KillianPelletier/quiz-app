@@ -7,7 +7,7 @@ const instance = axios.create({
 import participationStorageService from "@/services/ParticipationStorageService";
 
 export default {
-  async call(method, resource, data = null, token = null) {
+  async call(method, resource, data = null, token = null, isLoginPage = false) {
     var headers = {
       "Content-Type": "application/json",
     };
@@ -25,7 +25,7 @@ export default {
         return { status: response.status, data: response.data };
       })
       .catch((error) => {
-        if (error.response.status == 401) {
+        if ((error.response.status == 401) & !isLoginPage) {
           participationStorageService.clear();
           this.$router.push("/login");
         }
@@ -51,7 +51,7 @@ export default {
     let data = {
       password: password,
     };
-    let result = this.call("post", "login", data);
+    let result = this.call("post", "login", data, null, true);
     return result;
   },
   getAllQuestions(token) {
@@ -65,5 +65,5 @@ export default {
   },
   addQuestion(data, token) {
     return this.call("post", "questions", data, token);
-  }
+  },
 };

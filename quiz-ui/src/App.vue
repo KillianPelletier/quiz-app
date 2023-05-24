@@ -5,14 +5,14 @@
 <template>
   <div class="videoBackground">
     <video class="videoItself" autoplay muted loop id="myVideo">
-      <source src="src/assets/bulles2.webm" type="video/webm">
+      <source src="/bulles2.webm" type="video/webm">
     </video>
   </div>
   <header>
     <div class="headerCustom">
       <nav class="headerGridContainer">
         
-        <RouterLink to="/" class="headerGridItem heinekenRed"><img src="src/assets/redStar.png"><h2 style="height:100%; text-align: center;">Alcoolotestoquizz</h2></RouterLink>
+        <RouterLink to="/" class="headerGridItem heinekenRed"><img src="/redStar.png"><h2 style="height:100%; text-align: center;">Alcoolotestoquizz</h2></RouterLink>
         <RouterLink to="/about" class="headerGridItem heinekenRed"><h2 style="height:100%; vertical-align: middle; line-height: 90px;">Nous</h2></RouterLink>
         <RouterLink to="/login" class="headerGridItem heinekenRed"><h2 style="height:100%; vertical-align: middle; line-height: 90px;">Admin</h2></RouterLink>
       </nav>
