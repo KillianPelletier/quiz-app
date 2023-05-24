@@ -10,10 +10,10 @@
     ref="fileInput"
   />
   <a class="image-upload-remove-link" 
-		 href="#" 
-		 v-if="file" 
-		 @click="clickRemoveImageHandler">
-			Supprimer l'image
+    href="#" 
+    v-if="file" 
+    @click="clickRemoveImageHandler">
+    Supprimer l'image
   </a>
 </template>
 <script>
