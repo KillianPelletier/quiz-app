@@ -37,7 +37,7 @@
 
 <script>
 import quizApiService from "@/services/QuizApiService";
-import participationStorageService from "@/services/participationStorageService";
+import participationStorageService from "@/services/ParticipationStorageService";
 
 export default {
   name: "AdminPage",

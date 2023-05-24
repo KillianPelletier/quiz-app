@@ -4,7 +4,7 @@ const instance = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}`,
   json: true,
 });
-import participationStorageService from "@/services/participationStorageService";
+import participationStorageService from "@/services/ParticipationStorageService";
 
 export default {
   async call(method, resource, data = null, token = null) {
