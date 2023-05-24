@@ -1,12 +1,12 @@
 <template>
-  <h3>{{question.title }}</h3>
-  <p>{{question.text}}</p>
+  <h3 class="white">{{question.title }}</h3>
+  <p class="white">{{question.text}}</p>
   <div style="min-height:320px">
     <img v-if="question.image" :src="question.image" />
   </div>
   <div class="gridContainer">
     <div v-for="(pa, index) in question.possibleAnswers" v-bind:key="pa.id" class="gridItem" @click="$emit('click-on-answer', index+1)">
-      <a class="question">{{pa.text}}</a>
+      <a class="question white">{{pa.text}}</a>
     </div>
   </div>
 
@@ -24,6 +24,10 @@
 </script>
 
 <style scoped>
+  a:hover{
+    color: white;
+  }
+
   img{
     max-height: 300px;
     max-width: 600px;
@@ -48,14 +52,14 @@
     text-align: center;
   }
 
-  .question{
-    width:100%;
-  }
-
   @media (hover: hover) {
     .gridItem:hover {
       background-color: hsla(160, 100%, 37%, 0.2);
       cursor: pointer;
     }
+  }
+
+  .question{
+    width:100%;
   }
 </style>
