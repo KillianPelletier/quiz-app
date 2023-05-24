@@ -1,12 +1,13 @@
 <template>
 
   <h1>Admin</h1>
-  <div>
+  <button @click="deconnection">Se déconnecter</button>
+  <div style="overflow: scroll; height: 100vh;">
     <button id="show-modal" @click="questionAdd()">Ajouter une question</button>
     <table>
       <tr>
         <th>Position</th>
-        <th>Image</th>
+        <th>Image</th> 
         <th>Titre</th>
         <th>Intitulé</th>
         <th></th>
@@ -35,7 +36,7 @@
     <!--Question modification Modal-->
     <div class="modal-mask" v-if="idShowQuestionUpdate != -1 || addQuestion == true">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container" >
           <div class="modal-header">
             <slot name="header">
               <div v-if="idShowQuestionUpdate != -1">
@@ -299,6 +300,8 @@ export default {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
+  max-height: 78vh;
+  overflow-y: scroll;
 }
 
 .modal-header h3 {
